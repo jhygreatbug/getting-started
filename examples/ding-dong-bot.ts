@@ -84,6 +84,8 @@ async function 查询信息 (msgText: string, msg: Message) {
     const talkContact = msg.talker()
     const listenerContact = msg.listener()
     const room = msg.room()
+    logTextList.push(`date: ${msg.date()}`)
+    logTextList.push(`age: ${msg.age()}`)
     if (room) {
       logTextList.push(`room id: ${room.id}`)
       logTextList.push(`room topic: ${await room.topic()}`)
@@ -115,7 +117,8 @@ async function onMessage (msg: Message) {
   }
 
   // 跳过近期的消息（重启服务，会把近期消息重新走一遍……）
-  if (msg.age() > 60) {
+  // 为什么是180: massage存活180秒后换新，所以实时消息age上限是180
+  if (msg.age() > 180) {
     return
   }
 
